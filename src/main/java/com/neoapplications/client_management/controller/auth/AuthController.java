@@ -1,6 +1,6 @@
 package com.neoapplications.client_management.controller.auth;
 
-import com.neoapplications.client_management.dto.JwtResponseDto;
+import com.neoapplications.client_management.dto.jwt.JwtResponseDto;
 import com.neoapplications.client_management.dto.login.LoginRequestDto;
 import com.neoapplications.client_management.dto.user.UserDto;
 import com.neoapplications.client_management.service.AuthService;

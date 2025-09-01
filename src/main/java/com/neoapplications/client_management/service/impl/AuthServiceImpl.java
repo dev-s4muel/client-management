@@ -1,6 +1,6 @@
 package com.neoapplications.client_management.service.impl;
 
-import com.neoapplications.client_management.dto.JwtPayloadDto;
+import com.neoapplications.client_management.dto.jwt.JwtPayloadDto;
 import com.neoapplications.client_management.dto.login.LoginRequestDto;
 import com.neoapplications.client_management.exceptions.InvalidCredentialsException;
 import com.neoapplications.client_management.model.auth.User;

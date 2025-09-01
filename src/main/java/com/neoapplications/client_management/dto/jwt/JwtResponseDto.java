@@ -1,4 +1,4 @@
-package com.neoapplications.client_management.dto;
+package com.neoapplications.client_management.dto.jwt;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package com.neoapplications.client_management.util;
 
-import com.neoapplications.client_management.dto.JwtPayloadDto;
+import com.neoapplications.client_management.dto.jwt.JwtPayloadDto;
 import com.neoapplications.client_management.exceptions.JwtKeyMissingException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
