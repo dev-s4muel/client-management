@@ -29,8 +29,8 @@ public class ErrorConstants {
     public static final String USER_NOT_FOUND_CODE = "5002";
     public static final String USER_NOT_FOUND_MESSAGE = "Usuário não encontrado";
 
-    public static final String ERROR_DELETING_USER_CODE = "5003";
-    public static final String ERROR_DELETING_USER_MESSAGE = "Erro ao Deletar Usuario do Sistema";
+    public static final String ERROR_DEACTIVATE_USER_CODE = "5003";
+    public static final String ERROR_DEACTIVATE_USER_MESSAGE = "Erro ao inativar Usuario do Sistema";
 
     public static final String CPF_ALREADY_REGISTERED_CODE = "5004";
     public static final String CPF_ALREADY_REGISTERED_MESSAGE = "CPF já cadastrado no sistema";
@@ -75,7 +75,7 @@ public class ErrorConstants {
                 new AbstractMap.SimpleEntry<>(EMAIL_ALREADY_REGISTERED_CODE, EMAIL_ALREADY_REGISTERED_MESSAGE),
                 new AbstractMap.SimpleEntry<>(USER_NOT_FOUND_CODE, USER_NOT_FOUND_MESSAGE),
                 new AbstractMap.SimpleEntry<>(JWT_KEY_MISSING_CODE, JWT_KEY_MISSING_MESSAGE),
-                new AbstractMap.SimpleEntry<>(ERROR_DELETING_USER_CODE, ERROR_DELETING_USER_MESSAGE),
+                new AbstractMap.SimpleEntry<>(ERROR_DEACTIVATE_USER_CODE, ERROR_DEACTIVATE_USER_MESSAGE),
                 new AbstractMap.SimpleEntry<>(INVALID_ZIP_CODE_MESSAGE, INVALID_ZIP_CODE_CODE),
                 new AbstractMap.SimpleEntry<>(ZIP_CODE_NOT_FOUND_MESSAGE, ZIP_CODE_NOT_FOUND_CODE),
                 new AbstractMap.SimpleEntry<>(QUERY_ERROR_MESSAGE_CODE, QUERY_ERROR_MESSAGE),

@@ -15,6 +15,7 @@ import java.util.Map;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.CPF_ALREADY_REGISTERED_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.DUPLICATE_ENTRY_SNIPPET;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.EMAIL_ALREADY_REGISTERED_CODE;
+import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_DEACTIVATE_USER_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_FOREIGN_KEY_VIOLATION_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_FOREIGN_KEY_VIOLATION_GENERIC_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_VALUE_NOT_VALID_CODE;
@@ -22,6 +23,7 @@ import static com.neoapplications.client_management.exceptions.constants.ErrorCo
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.INVALID_CREDENTIALS_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.INVALID_DESERIALIZATION_SNIPPET;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.JWT_KEY_MISSING_CODE;
+import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.USER_NOT_FOUND_CODE;
 
 
 @ControllerAdvice
@@ -84,4 +86,16 @@ public class RestExceptionHandler {
     private ResponseEntity<RestErrorMessage> CpfAlreadyRegisteredExceptionHandler(CpfAlreadyRegisteredException e) {
         return buildErrorResponse(CPF_ALREADY_REGISTERED_CODE, HttpStatus.BAD_REQUEST);
     }
+
+
+    @ExceptionHandler(UserNotFoundException.class)
+    private ResponseEntity<RestErrorMessage> UserNotFoundExceptionHandler(UserNotFoundException e) {
+        return buildErrorResponse(USER_NOT_FOUND_CODE, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ErrorDeactivateUserException.class)
+    private ResponseEntity<RestErrorMessage> errorDeactivateUserExceptionHandler(ErrorDeactivateUserException e) {
+        return buildErrorResponse(ERROR_DEACTIVATE_USER_CODE, HttpStatus.NOT_FOUND);
+    }
+
 }
