@@ -1,12 +1,17 @@
 package com.neoapplications.client_management.controller.user;
 
+import com.neoapplications.client_management.dto.user.UserRequestDto;
+import com.neoapplications.client_management.dto.user.UserResponseDto;
 import com.neoapplications.client_management.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,5 +35,14 @@ public class UserController {
 
         userService.deactivateUserById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDto> updateClient(
+            @PathVariable UUID userId,
+            @Valid @RequestBody UserRequestDto userRequestDto,
+            @RequestHeader(name = "Authorization", required = true) String token){
+        UserResponseDto updated = userService.update(userId, userRequestDto);
+        return ResponseEntity.ok(updated);
     }
 }

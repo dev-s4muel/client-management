@@ -1,18 +1,22 @@
 package com.neoapplications.client_management.service.impl;
 
-import com.neoapplications.client_management.dto.user.UserDto;
+import com.neoapplications.client_management.dto.user.UserRequestDto;
+import com.neoapplications.client_management.dto.user.UserResponseDto;
 import com.neoapplications.client_management.exceptions.CpfAlreadyRegisteredException;
+import com.neoapplications.client_management.exceptions.CpfCannotBeChangedException;
 import com.neoapplications.client_management.exceptions.EmailAlreadyRegisteredException;
 import com.neoapplications.client_management.exceptions.ErrorDeactivateUserException;
 import com.neoapplications.client_management.exceptions.UserNotFoundException;
 import com.neoapplications.client_management.model.auth.User;
 import com.neoapplications.client_management.repository.UserRepository;
 import com.neoapplications.client_management.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -26,28 +30,28 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void registerUser(UserDto userDTO) {
-        log.info("Iniciando o registro do usuário com e-mail: {}", userDTO.getEmail());
+    public void registerUser(UserRequestDto userRequestDTO) {
+        log.info("Iniciando o registro do usuário com e-mail: {}", userRequestDTO.getEmail());
 
         // Verifica se o e-mail já está cadastrado
-        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-            log.warn("Tentativa de registro com e-mail já cadastrado: {}", userDTO.getEmail());
+        if (userRepository.findByEmail(userRequestDTO.getEmail()).isPresent()) {
+            log.warn("Tentativa de registro com e-mail já cadastrado: {}", userRequestDTO.getEmail());
             throw new EmailAlreadyRegisteredException();
         }
 
         // Verifica se o CPF já está cadastrado
-        if (userRepository.findByCpf(userDTO.getCpf()).isPresent()) {
-            log.warn("Tentativa de registro com CPF já cadastrado: {}", userDTO.getCpf());
+        if (userRepository.findByCpf(userRequestDTO.getCpf()).isPresent()) {
+            log.warn("Tentativa de registro com CPF já cadastrado: {}", userRequestDTO.getCpf());
             throw new CpfAlreadyRegisteredException();
         }
 
         User user = new User(
-                userDTO.getName(),
-                userDTO.getEmail(),
-                passwordEncoder.encode(userDTO.getPassword()), // Criptografa a senha
-                userDTO.getCpf(),
-                userDTO.getCellPhone(),
-                userDTO.getBirthDate()
+                userRequestDTO.getName(),
+                userRequestDTO.getEmail(),
+                passwordEncoder.encode(userRequestDTO.getPassword()), // Criptografa a senha
+                userRequestDTO.getCpf(),
+                userRequestDTO.getCellPhone(),
+                userRequestDTO.getBirthDate()
         );
 
         userRepository.save(user);
@@ -72,5 +76,34 @@ public class UserServiceImpl implements UserService {
             log.error("Erro ao inativar o usuário com ID {}. Detalhes: {}", id, ex.getMessage());
             throw new ErrorDeactivateUserException();
         }
+    }
+
+    @Transactional
+    @Override
+    public UserResponseDto update(UUID userId, UserRequestDto userRequestDto) {
+        log.info("Atualizando usuário {}", userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        if (userRepository.existsByEmailAndIdNot(userRequestDto.getEmail(), userId)) {
+            log.warn("E-mail já cadastrado: {}", userRequestDto.getEmail());
+            throw new EmailAlreadyRegisteredException();
+        }
+
+        user.setName(userRequestDto.getName());
+        user.setEmail(userRequestDto.getEmail());
+
+        if (userRequestDto.getPassword() != null && !userRequestDto.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+        }
+
+        if (!Objects.equals(user.getCpf(), userRequestDto.getCpf())) {
+             throw new CpfCannotBeChangedException();
+        }
+        user.setCellPhone(userRequestDto.getCellPhone());
+        user.setBirthDate(userRequestDto.getBirthDate());
+
+        log.info("Usuário {} atualizado com sucesso.", userId);
+        return UserResponseDto.from(user);
     }
 }
