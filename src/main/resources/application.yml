@@ -2,7 +2,7 @@ spring:
   application:
     name: client-management
   datasource:
-    url: ${DB_URL:jdbc:postgresql://postgres:5432/client-management}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/client-management}
     username: ${DB_USERNAME:neoapp}
     password: ${DB_PASSWORD:neoapp}
     driver-class-name: org.postgresql.Driver
@@ -18,3 +18,7 @@ server:
   port: 8080
   error:
     include-stacktrace: always
+
+jwt:
+  secret: ${API_SECRET:minhaChaveSuperSecretaDeNoMinimo32Caracteres}
+  expiration-time: 36000000
