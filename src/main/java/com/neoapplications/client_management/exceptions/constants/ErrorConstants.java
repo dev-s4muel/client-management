@@ -32,6 +32,10 @@ public class ErrorConstants {
     public static final String ERROR_DELETING_USER_CODE = "5003";
     public static final String ERROR_DELETING_USER_MESSAGE = "Erro ao Deletar Usuario do Sistema";
 
+    public static final String CPF_ALREADY_REGISTERED_CODE = "5004";
+    public static final String CPF_ALREADY_REGISTERED_MESSAGE = "CPF já cadastrado no sistema";
+
+
     public static final String PRODUCT_NOT_FOUND_CODE = "6001";
     public static final String PRODUCT_NOT_FOUND_MESSAGE = "Produto não encontrado";
 
@@ -82,7 +86,8 @@ public class ErrorConstants {
                 new AbstractMap.SimpleEntry<>(PRODUCT_NOT_FOUND_CODE, PRODUCT_NOT_FOUND_MESSAGE),
                 new AbstractMap.SimpleEntry<>(ERROR_DELETING_PRODUCT_CODE, ERROR_DELETING_PRODUCT_MESSAGE),
                 new AbstractMap.SimpleEntry<>(ERROR_VALUE_NOT_VALID_DESERIALIZE_CODE, ERROR_VALUE_NOT_VALID_DESERIALIZE_MESSAGE),
-                new AbstractMap.SimpleEntry<>(ERROR_LOG_ENTITY_CHANGES_CODE, ERROR_LOG_ENTITY_CHANGES_MESSAGE)
+                new AbstractMap.SimpleEntry<>(CPF_ALREADY_REGISTERED_CODE, CPF_ALREADY_REGISTERED_MESSAGE),
+        new AbstractMap.SimpleEntry<>(ERROR_LOG_ENTITY_CHANGES_CODE, ERROR_LOG_ENTITY_CHANGES_MESSAGE)
 
         );
     }

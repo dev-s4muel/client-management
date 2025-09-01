@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.io.IOException;
 import java.util.Map;
 
+import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.CPF_ALREADY_REGISTERED_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.DUPLICATE_ENTRY_SNIPPET;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.EMAIL_ALREADY_REGISTERED_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_FOREIGN_KEY_VIOLATION_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_FOREIGN_KEY_VIOLATION_GENERIC_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_VALUE_NOT_VALID_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_VALUE_NOT_VALID_DESERIALIZE_CODE;
+import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.INVALID_CREDENTIALS_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.INVALID_DESERIALIZATION_SNIPPET;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.JWT_KEY_MISSING_CODE;
 
@@ -71,5 +73,15 @@ public class RestExceptionHandler {
             return buildErrorResponse(ERROR_FOREIGN_KEY_VIOLATION_CODE, HttpStatus.CONFLICT);
         }
         return buildErrorResponse(ERROR_FOREIGN_KEY_VIOLATION_GENERIC_CODE, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    private ResponseEntity<RestErrorMessage> invalidCredentialsExceptionHandler(InvalidCredentialsException e) {
+        return buildErrorResponse(INVALID_CREDENTIALS_CODE, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(CpfAlreadyRegisteredException.class)
+    private ResponseEntity<RestErrorMessage> CpfAlreadyRegisteredExceptionHandler(CpfAlreadyRegisteredException e) {
+        return buildErrorResponse(CPF_ALREADY_REGISTERED_CODE, HttpStatus.BAD_REQUEST);
     }
 }
