@@ -19,16 +19,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    public static final String SECURITY = "bearerAuth";
-    public static final String URI_REGISTER = "api/auth/register";
-    public static final String URI_LOGIN = "api/auth/login";
-
+    public static final String URI_AUTH = "api/auth/**";
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, URI_REGISTER).permitAll()
-                        .requestMatchers(HttpMethod.POST, URI_LOGIN).permitAll()
+                        .requestMatchers(HttpMethod.POST, URI_AUTH).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
