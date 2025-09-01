@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 @Setter
 @Getter
-public class UserDto {
+public class UserRequestDto {
 
     @NotBlank(message = "O nome é obrigatório.")
     @JsonProperty("nome")

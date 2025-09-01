@@ -2,7 +2,7 @@ package com.neoapplications.client_management.controller.auth;
 
 import com.neoapplications.client_management.dto.jwt.JwtResponseDto;
 import com.neoapplications.client_management.dto.login.LoginRequestDto;
-import com.neoapplications.client_management.dto.user.UserDto;
+import com.neoapplications.client_management.dto.user.UserRequestDto;
 import com.neoapplications.client_management.service.AuthService;
 import com.neoapplications.client_management.service.UserService;
 import jakarta.validation.Valid;
@@ -26,9 +26,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<Void> createNewAccount(@Valid @RequestBody UserDto userDto) {
-        log.info("Tentativa de registro para o email: {}", userDto.getEmail());
-        userService.registerUser(userDto);
+    public ResponseEntity<Void> createNewAccount(@Valid @RequestBody UserRequestDto userRequestDto) {
+        log.info("Tentativa de registro para o email: {}", userRequestDto.getEmail());
+        userService.registerUser(userRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
