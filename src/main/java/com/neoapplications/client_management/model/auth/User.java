@@ -29,6 +29,7 @@ import java.util.UUID;
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "User")
 @Table(name = "tb_user")
 public class User {
