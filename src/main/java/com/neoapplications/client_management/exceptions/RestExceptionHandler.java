@@ -2,7 +2,6 @@ package com.neoapplications.client_management.exceptions;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.neoapplications.client_management.exceptions.constants.ErrorConstants;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,11 +12,9 @@ import java.io.IOException;
 import java.util.Map;
 
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.CPF_ALREADY_REGISTERED_CODE;
-import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.DUPLICATE_ENTRY_SNIPPET;
+import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.CPF_CANNOT_BE_CHANGED_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.EMAIL_ALREADY_REGISTERED_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_DEACTIVATE_USER_CODE;
-import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_FOREIGN_KEY_VIOLATION_CODE;
-import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_FOREIGN_KEY_VIOLATION_GENERIC_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_VALUE_NOT_VALID_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.ERROR_VALUE_NOT_VALID_DESERIALIZE_CODE;
 import static com.neoapplications.client_management.exceptions.constants.ErrorConstants.INVALID_CREDENTIALS_CODE;
@@ -68,14 +65,6 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    private ResponseEntity<RestErrorMessage> foreignKeyViolationHandler(DataIntegrityViolationException e) {
-
-        if (e.getMessage().contains(DUPLICATE_ENTRY_SNIPPET)) {
-            return buildErrorResponse(ERROR_FOREIGN_KEY_VIOLATION_CODE, HttpStatus.CONFLICT);
-        }
-        return buildErrorResponse(ERROR_FOREIGN_KEY_VIOLATION_GENERIC_CODE, HttpStatus.CONFLICT);
-    }
 
     @ExceptionHandler(InvalidCredentialsException.class)
     private ResponseEntity<RestErrorMessage> invalidCredentialsExceptionHandler(InvalidCredentialsException e) {
@@ -96,6 +85,11 @@ public class RestExceptionHandler {
     @ExceptionHandler(ErrorDeactivateUserException.class)
     private ResponseEntity<RestErrorMessage> errorDeactivateUserExceptionHandler(ErrorDeactivateUserException e) {
         return buildErrorResponse(ERROR_DEACTIVATE_USER_CODE, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CpfCannotBeChangedException.class)
+    private ResponseEntity<RestErrorMessage> cpfCannotBeChangedExceptionHandler(CpfCannotBeChangedException e) {
+        return buildErrorResponse(CPF_CANNOT_BE_CHANGED_CODE, HttpStatus.NOT_FOUND);
     }
 
 }

@@ -35,33 +35,10 @@ public class ErrorConstants {
     public static final String CPF_ALREADY_REGISTERED_CODE = "5004";
     public static final String CPF_ALREADY_REGISTERED_MESSAGE = "CPF já cadastrado no sistema";
 
+    public static final String CPF_CANNOT_BE_CHANGED_CODE = "5005";
+    public static final String CPF_CANNOT_BE_CHANGED_CODE_MESSAGE = "CPF não pode ser alterado.";
 
-    public static final String PRODUCT_NOT_FOUND_CODE = "6001";
-    public static final String PRODUCT_NOT_FOUND_MESSAGE = "Produto não encontrado";
 
-    public static final String ERROR_DELETING_PRODUCT_CODE = "6002";
-    public static final String ERROR_DELETING_PRODUCT_MESSAGE = "Erro ao Deletar produto do Sistema";
-
-    public static final String INVALID_ZIP_CODE_CODE = "7001";
-    public static final String INVALID_ZIP_CODE_MESSAGE = "CEP inválido. O formato esperado é '00000-000' ou '00000000";
-
-    public static final String ZIP_CODE_NOT_FOUND_CODE = "7002";
-    public static final String ZIP_CODE_NOT_FOUND_MESSAGE = "CEP não encontrado";
-
-    public static final String QUERY_ERROR_MESSAGE_CODE = "7003";
-    public static final String QUERY_ERROR_MESSAGE = "Erro ao buscar CEP para este endereço.";
-
-    public static final String CATEGORY_NOT_FOUND_CODE = "8001";
-    public static final String CATEGORY_NOT_FOUND_MESSAGE = "Categoria não encontrada";
-
-    public static final String ERROR_DELETING_CATEGORY_CODE = "8002";
-    public static final String ERROR_DELETING_CATEGORY_MESSAGE = "Erro ao Deletar categoria do Sistema";
-
-    public static final String ERROR_FOREIGN_KEY_VIOLATION_CODE = "9001";
-    public static final String ERROR_FOREIGN_KEY_VIOLATION_MESSAGE = "Já existe um registro com esse valor no sistema.";
-
-    public static final String ERROR_FOREIGN_KEY_VIOLATION_GENERIC_CODE = "9002";
-    public static final String ERROR_FOREIGN_KEY_VIOLATION_GENERIC_MESSAGE = "Já existe um registro com esse valor no sistema.";
 
     public static final String ERROR_LOG_ENTITY_CHANGES_CODE = "10001";
     public static final String ERROR_LOG_ENTITY_CHANGES_MESSAGE = "Erro ao registrar mudanças";
@@ -70,23 +47,15 @@ public class ErrorConstants {
 
     static {
         ERROR_MAP = Map.ofEntries(
-                new AbstractMap.SimpleEntry<>(ERRO_DEFAULT_MESSAGE, ERRO_DEFAULT_CODE),
+                new AbstractMap.SimpleEntry<>(ERRO_DEFAULT_CODE, ERRO_DEFAULT_MESSAGE ),
                 new AbstractMap.SimpleEntry<>(INVALID_CREDENTIALS_CODE, INVALID_CREDENTIALS_MESSAGE),
                 new AbstractMap.SimpleEntry<>(EMAIL_ALREADY_REGISTERED_CODE, EMAIL_ALREADY_REGISTERED_MESSAGE),
                 new AbstractMap.SimpleEntry<>(USER_NOT_FOUND_CODE, USER_NOT_FOUND_MESSAGE),
                 new AbstractMap.SimpleEntry<>(JWT_KEY_MISSING_CODE, JWT_KEY_MISSING_MESSAGE),
                 new AbstractMap.SimpleEntry<>(ERROR_DEACTIVATE_USER_CODE, ERROR_DEACTIVATE_USER_MESSAGE),
-                new AbstractMap.SimpleEntry<>(INVALID_ZIP_CODE_MESSAGE, INVALID_ZIP_CODE_CODE),
-                new AbstractMap.SimpleEntry<>(ZIP_CODE_NOT_FOUND_MESSAGE, ZIP_CODE_NOT_FOUND_CODE),
-                new AbstractMap.SimpleEntry<>(QUERY_ERROR_MESSAGE_CODE, QUERY_ERROR_MESSAGE),
-                new AbstractMap.SimpleEntry<>(CATEGORY_NOT_FOUND_CODE, CATEGORY_NOT_FOUND_MESSAGE),
-                new AbstractMap.SimpleEntry<>(ERROR_DELETING_CATEGORY_CODE, ERROR_DELETING_CATEGORY_MESSAGE),
-                new AbstractMap.SimpleEntry<>(ERROR_FOREIGN_KEY_VIOLATION_CODE, ERROR_FOREIGN_KEY_VIOLATION_MESSAGE),
-                new AbstractMap.SimpleEntry<>(ERROR_FOREIGN_KEY_VIOLATION_GENERIC_CODE, ERROR_FOREIGN_KEY_VIOLATION_GENERIC_MESSAGE),
-                new AbstractMap.SimpleEntry<>(PRODUCT_NOT_FOUND_CODE, PRODUCT_NOT_FOUND_MESSAGE),
-                new AbstractMap.SimpleEntry<>(ERROR_DELETING_PRODUCT_CODE, ERROR_DELETING_PRODUCT_MESSAGE),
                 new AbstractMap.SimpleEntry<>(ERROR_VALUE_NOT_VALID_DESERIALIZE_CODE, ERROR_VALUE_NOT_VALID_DESERIALIZE_MESSAGE),
                 new AbstractMap.SimpleEntry<>(CPF_ALREADY_REGISTERED_CODE, CPF_ALREADY_REGISTERED_MESSAGE),
+                new AbstractMap.SimpleEntry<>(CPF_CANNOT_BE_CHANGED_CODE, CPF_CANNOT_BE_CHANGED_CODE_MESSAGE),
         new AbstractMap.SimpleEntry<>(ERROR_LOG_ENTITY_CHANGES_CODE, ERROR_LOG_ENTITY_CHANGES_MESSAGE)
 
         );
