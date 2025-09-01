@@ -1,6 +1,7 @@
 package com.neoapplications.client_management.service.impl;
 
 import com.neoapplications.client_management.dto.user.UserDto;
+import com.neoapplications.client_management.exceptions.CpfAlreadyRegisteredException;
 import com.neoapplications.client_management.exceptions.EmailAlreadyRegisteredException;
 import com.neoapplications.client_management.model.auth.User;
 import com.neoapplications.client_management.repository.UserRepository;
@@ -28,6 +29,12 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             log.warn("Tentativa de registro com e-mail já cadastrado: {}", userDTO.getEmail());
             throw new EmailAlreadyRegisteredException();
+        }
+
+        // Verifica se o CPF já está cadastrado
+        if (userRepository.findByCpf(userDTO.getCpf()).isPresent()) {
+            log.warn("Tentativa de registro com CPF já cadastrado: {}", userDTO.getCpf());
+            throw new CpfAlreadyRegisteredException();
         }
 
         User user = new User(
