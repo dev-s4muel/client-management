@@ -2,7 +2,7 @@ spring:
   application:
     name: client-management
   datasource:
-    url: ${DB_URL:jdbc:postgresql://postgres:5432/clientdb}
+    url: ${DB_URL:jdbc:postgresql://postgres:5432/client-management}
     username: ${DB_USERNAME:neoapp}
     password: ${DB_PASSWORD:neoapp}
     driver-class-name: org.postgresql.Driver
