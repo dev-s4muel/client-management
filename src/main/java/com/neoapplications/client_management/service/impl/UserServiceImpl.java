@@ -10,11 +10,15 @@ import com.neoapplications.client_management.exceptions.UserNotFoundException;
 import com.neoapplications.client_management.model.auth.User;
 import com.neoapplications.client_management.repository.UserRepository;
 import com.neoapplications.client_management.service.UserService;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -105,5 +109,19 @@ public class UserServiceImpl implements UserService {
 
         log.info("Usuário {} atualizado com sucesso.", userId);
         return UserResponseDto.from(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<UserResponseDto> listUsers(int page, int size, String sort) {
+        String[] sortParts = sort.split(",");
+        Sort.Direction direction = sortParts.length > 1 && sortParts[1].equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortParts[0]));
+
+        return userRepository.findAll(pageable)
+                .map(UserResponseDto::from);
     }
 }
