@@ -1,8 +1,5 @@
--- Ativar extensão para geração de UUID (caso ainda não esteja ativa)
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-
 CREATE TABLE tb_user (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY,
     role VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -12,5 +9,5 @@ CREATE TABLE tb_user (
     cpf CHAR(11) UNIQUE NOT NULL,
     cell_phone VARCHAR(11) NOT NULL,
     birth_date DATE NOT NULL,
-    active BOOLEAN NOT NULL DEFAULT TRUE
+    is_Active BOOLEAN NOT NULL DEFAULT TRUE
 );
