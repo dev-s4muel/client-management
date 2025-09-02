@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @Setter
 @Getter
@@ -28,12 +29,20 @@ public class UserResponseDto {
     @JsonProperty("data-nascimento")
     private LocalDate birthDate;
 
+    private int age;
+
     public static UserResponseDto from(User user) {
         UserResponseDto dto = new UserResponseDto();
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
         dto.setCellPhone(user.getCellPhone());
         dto.setBirthDate(user.getBirthDate());
+        dto.setAge(calculateAge(user.getBirthDate()));
+
         return dto;
+    }
+
+    private static int calculateAge(LocalDate birthDate) {
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 }
