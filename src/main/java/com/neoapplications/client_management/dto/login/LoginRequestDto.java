@@ -3,11 +3,13 @@ package com.neoapplications.client_management.dto.login;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
+@AllArgsConstructor
 public class LoginRequestDto {
 
     @NotBlank(message = "O e-mail é obrigatório.")

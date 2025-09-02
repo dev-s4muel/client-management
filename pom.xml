@@ -113,6 +113,35 @@
             <version>2.8.11</version>
         </dependency>
 
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>5.10.2</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Mockito core + integração JUnit 5 -->
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>5.12.0</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>5.12.0</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- AssertJ para asserts mais legíveis -->
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.25.3</version>
+                <scope>test</scope>
+            </dependency>
+
     </dependencies>
 
 	<build>
@@ -141,6 +170,33 @@
 					</excludes>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                                <!-- Excluir DTOs -->
+                                <exclude>**/dto/**</exclude>
+                                <!-- Excluir classe principal -->
+                                <exclude>**/ClientManagementApplication.class</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 

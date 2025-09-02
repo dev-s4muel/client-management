@@ -3,13 +3,18 @@ package com.neoapplications.client_management.util;
 import com.neoapplications.client_management.dto.jwt.JwtPayloadDto;
 import com.neoapplications.client_management.exceptions.JwtKeyMissingException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
@@ -23,50 +28,65 @@ public class JwtUtil {
 
     private SecretKey secretKey;
 
-    public static final Integer BEARER_PREFIX_LENGTH = 7;
+    private JwtParser parser;
 
-    // Inicializa a chave de assinatura
+    public static final int BEARER_PREFIX_LENGTH = 7;
+    public static final String BEARER_PREFIX = "Bearer ";
+
     @PostConstruct
     public void init() {
-        if (secret != null && secret.length() >= 32) {
-            secretKey = Keys.hmacShaKeyFor(secret.getBytes());
-        } else {
+        if (secret == null || secret.length() < 32) {
             throw new JwtKeyMissingException();
+        }
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        // tolerância de 5s para evitar flutuação de relógio em testes/ambiente
+        this.parser = Jwts.parserBuilder().setSigningKey(secretKey).setAllowedClockSkewSeconds(5).build();
+    }
+
+    public String generateToken(JwtPayloadDto jwtPayloadDto) {
+        Date now = new Date();
+        Date exp = new Date(now.getTime() + expirationTime);
+        return Jwts.builder().setSubject(jwtPayloadDto.getEmail()).claim("role", jwtPayloadDto.getRole()).setIssuedAt(now).setExpiration(exp).signWith(secretKey, SignatureAlgorithm.HS256).compact();
+    }
+
+    //     Remove prefixo "Bearer " se presente.
+    private String rawToken(String tokenOrBearer) {
+        if (tokenOrBearer == null) return null;
+        return tokenOrBearer.startsWith(BEARER_PREFIX) ? tokenOrBearer.substring(BEARER_PREFIX_LENGTH) : tokenOrBearer;
+    }
+
+    //     Extrai claims; pode lançar ExpiredJwtException/SignatureException se o chamador quiser tratar.
+    public Claims extractClaims(String tokenOrBearer) {
+        String token = rawToken(tokenOrBearer);
+        return parser.parseClaimsJws(token).getBody();
+    }
+
+    //     Extrai o subject (email) a partir de um header Authorization: Bearer ...
+    public String extractEmailUser(String bearer) {
+        return extractClaims(bearer).getSubject();
+    }
+
+    //     Retorna true se expirado; não propaga ExpiredJwtException.
+    public boolean isTokenExpired(String tokenOrBearer) {
+        try {
+            Date exp = extractClaims(tokenOrBearer).getExpiration();
+            return exp.before(new Date());
+        } catch (ExpiredJwtException e) {
+            return true;
+        } catch (JwtException e) {
+            // token inválido por qualquer outro motivo (assinatura, formato, etc.)
+            return true;
         }
     }
 
-    // Gera o token JWT
-    public String generateToken(JwtPayloadDto jwtPayloadDto) {
-        return Jwts.builder()
-                .setSubject(jwtPayloadDto.getEmail())
-                .claim("role", jwtPayloadDto.getRole())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-                .signWith(secretKey)
-                .compact();
-    }
-
-    // Extrai as claims do token
-    public Claims extractClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    public String extractEmailUser(String bearer) {
-        String token = bearer.substring(BEARER_PREFIX_LENGTH); // Remove "Bearer " do início
-        return extractClaims(token).getSubject();
-    }
-
-    public boolean isTokenValid(String token, String email) {
-        String tokenEmail = extractClaims(token).getSubject();
-        return email.equals(tokenEmail) && !isTokenExpired(token);
-    }
-
-    // Verifica se o token expirou
-    public boolean isTokenExpired(String token) {
-        return extractClaims(token).getExpiration().before(new Date());
+    //     Validação booleana: subject bate e não expirou; não propaga exceções.
+    public boolean isTokenValid(String tokenOrBearer, String expectedEmail) {
+        try {
+            Claims claims = extractClaims(tokenOrBearer);
+            String subject = claims.getSubject();
+            return expectedEmail.equals(subject) && !isTokenExpired(tokenOrBearer);
+        } catch (JwtException e) {
+            return false;
+        }
     }
 }
