@@ -36,10 +36,9 @@ public class User {
 
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
@@ -80,7 +79,7 @@ public class User {
     @Column(nullable = false, name = "birth_Date")
     private LocalDate birthDate;
 
-    @Column(nullable = false)
+    @Column(name = "is_Active", nullable = false)
     private boolean isActive;
 
 
